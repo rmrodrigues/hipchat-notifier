@@ -8,8 +8,6 @@ import java.text.MessageFormat;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import org.apache.commons.codec.net.URLCodec;
-
 import com.google.gson.Gson;
 import com.rmrodrigues.integration.hipchat.exceptions.UnableToSendHipChatMsgException;
 
@@ -74,10 +72,9 @@ public class HipChatNotifier {
             }
             // Replace the path parameter
             urlBuilder.append(MessageFormat.format(URI_PALCEHOLDER, idOrRoomID));
-            URLCodec codec = new URLCodec();
 
             // Create URL object
-            URL obj = new URL(codec.encode(urlBuilder.toString()));
+            URL obj = new URL(urlBuilder.toString());
             // Get the connection
             HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
 
@@ -108,7 +105,7 @@ public class HipChatNotifier {
                 response.append(inputLine);
             }
             in.close();
-            return responseCode <= 200 && responseCode < 300;
+            return responseCode == 204;
         } catch (Exception e) {
             throw new UnableToSendHipChatMsgException(e.getLocalizedMessage());
         }
