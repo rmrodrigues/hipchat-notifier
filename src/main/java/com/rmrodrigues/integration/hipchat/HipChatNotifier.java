@@ -52,7 +52,7 @@ public class HipChatNotifier {
      * @throws UnableToSendHipChatMsgException the unable to send hip chat msg exception
      */
     public boolean send(String idOrRoomID, String authToken, HipChatMessage hipchatMessage)
-            throws UnableToSendHipChatMsgException {
+        throws UnableToSendHipChatMsgException {
 
         // Validations
         if (idOrRoomID == null || "".equals(idOrRoomID.trim()) || idOrRoomID.length() < 1 || idOrRoomID.length() > 100) {
@@ -90,8 +90,9 @@ public class HipChatNotifier {
             DataOutputStream wr = new DataOutputStream(con.getOutputStream());
 
             // Map HipchatMessage to JSON format data
-            Gson gson = new Gson();
-            wr.writeBytes(gson.toJson(hipchatMessage));
+            final Gson gson = new Gson();
+            final String jsonString = gson.toJson(hipchatMessage);
+            wr.write(jsonString.getBytes("utf-8"), 0, jsonString.getBytes("UTF-8").length);
             wr.flush();
             wr.close();
 
